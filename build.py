@@ -88,6 +88,11 @@ def link_deps():
         os.symlink(deps_path, this_path + "/.rdeps")
     except FileExistsError:
         print("exists")
+    try:
+        print("Symlimk: " + deps_path + " to: " + te_path + ".rdeps")
+        os.symlink(deps_path, te_path + ".rdeps")
+    except FileExistsError:
+        print("exists")
 
 
 print("Arch:")
