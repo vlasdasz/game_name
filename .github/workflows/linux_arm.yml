@@ -1,0 +1,23 @@
+name: Linux arm
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+   # runs-on: ubuntu-latest
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        arch:
+          - arm64
+    steps:
+      - uses: actions/checkout@v2
+      - name: linux arm
+        run: python3 build.py cleanup

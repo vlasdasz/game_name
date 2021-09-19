@@ -1,0 +1,19 @@
+name: Mac
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: macos-latest
+    #runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: Mac
+        run: python3 build.py
