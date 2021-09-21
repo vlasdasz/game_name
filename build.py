@@ -51,6 +51,7 @@ def rm(path):
 if cleanup:
     rm(tools_path)
     rm(gles_path)
+    rm(te_path)
 
 
 def run(string):
