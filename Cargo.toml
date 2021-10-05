@@ -3,5 +3,12 @@ name = "game_name"
 version = "0.1.0"
 edition = "2018"
 
+[[bin]]
+name = "game_name"
+
+[lib]
+name = "game_name"
+crate-type = ["rlib", "staticlib"]
+
 [dependencies]
 test_engine = { path = ".rdeps/test_engine/test_engine" }
