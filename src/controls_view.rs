@@ -4,10 +4,14 @@ use test_engine::*;
 use tools::{Boxed, Rglica, ToRglica};
 use ui::{DPadView, View, ViewBase};
 
+use crate::game_level::GameLevel;
+
 #[derive(Boxed)]
 pub struct ControlsView {
     base: ViewBase,
     dpad: Rglica<DPadView>,
+
+    level: GameLevel,
 }
 
 impl ControlsView {
@@ -41,7 +45,6 @@ impl View for ControlsView {
 }
 
 impl GameView for ControlsView {
-    fn level(&self) -> &dyn Level { todo!() }
-
-    fn level_mut(&mut self) -> &mut dyn Level { todo!() }
+    fn level(&self) -> &dyn Level { &self.level }
+    fn level_mut(&mut self) -> &mut dyn Level { &mut self.level }
 }
