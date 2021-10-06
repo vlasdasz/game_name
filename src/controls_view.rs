@@ -1,26 +1,27 @@
-use proc_macro::Boxed;
-use screen::GameView;
-use test_engine::*;
-use tools::{Boxed, Rglica, ToRglica};
-use ui::{DPadView, View, ViewBase};
+use test_engine::{
+    screen::GameView,
+    tools::Rglica,
+    ui::{complex::AnalogStickView, make_view_on, DPadView, View, ViewBase},
+    Image, Level,
+};
 
 use crate::game_level::GameLevel;
 
-#[derive(Boxed)]
+#[derive(Default)]
 pub struct ControlsView {
-    base: ViewBase,
-    dpad: Rglica<DPadView>,
+    base:   ViewBase,
+    dpad:   Rglica<DPadView>,
+    _stick: Rglica<AnalogStickView>,
 
     level: GameLevel,
 }
 
 impl ControlsView {
     fn setup_dpad(&mut self) {
-        let dpad = DPadView::boxed();
-        self.dpad = dpad.to_rglica();
+        self.dpad = make_view_on::<DPadView>(self);
+
         self.dpad.frame_mut().size.width = 280.0;
         self.dpad.frame_mut().size.height = 200.0;
-        self.add_subview(dpad);
 
         self.dpad.set_images(
             Image::load(&test_engine::paths::images().join("up.png")),
@@ -36,7 +37,7 @@ impl View for ControlsView {
 
     fn layout(&mut self) {
         self.place().as_background();
-        self.dpad.place().lb();
+        self.dpad.place().bottom_left_margin(10);
     }
 
     fn view(&self) -> &ViewBase { &self.base }

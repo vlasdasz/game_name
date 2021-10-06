@@ -1,14 +1,16 @@
-#![feature(option_result_unwrap_unchecked)]
 #![allow(incomplete_features)]
+#![feature(option_result_unwrap_unchecked)]
+#![feature(default_free_fn)]
 
 use std::{
+    default::default,
     os::raw::{c_float, c_int, c_ulong},
     ptr,
 };
 
 use test_engine::{
     gm::Size,
-    tools::{new, Boxed},
+    tools::Boxed,
     ui::{input::touch::Event, Touch},
     Screen,
 };
@@ -24,7 +26,7 @@ static mut SCREEN: *mut Screen = ptr::null_mut();
 pub extern "C" fn create_screen() {
     unsafe {
         SCREEN = Box::into_raw(Box::new(
-            Screen::new(new())
+            Screen::new(default())
                 .add_view(ControlsView::boxed())
                 .add_debug_view(),
         ));

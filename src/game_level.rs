@@ -1,6 +1,6 @@
-use test_engine::{proc_macro::New, Level, LevelBase, *};
+use test_engine::{Image, Level, LevelBase, Sprite};
 
-#[derive(New)]
+#[derive(Default)]
 pub struct GameLevel {
     base: LevelBase,
 }
