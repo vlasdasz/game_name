@@ -9,19 +9,18 @@ use crate::game_level::GameLevel;
 
 #[derive(Default)]
 pub struct ControlsView {
-    base:   ViewBase,
-    dpad:   Rglica<DPadView>,
-    _stick: Rglica<AnalogStickView>,
+    base:  ViewBase,
+    dpad:  Rglica<DPadView>,
+    stick: Rglica<AnalogStickView>,
 
     level: GameLevel,
 }
 
 impl ControlsView {
     fn setup_dpad(&mut self) {
-        self.dpad = make_view_on::<DPadView>(self);
+        self.dpad = make_view_on(self);
 
-        self.dpad.frame_mut().size.width = 280.0;
-        self.dpad.frame_mut().size.height = 200.0;
+        self.dpad.frame_mut().size = (280, 200).into();
 
         self.dpad.set_images(
             Image::load(&test_engine::paths::images().join("up.png")),
@@ -30,14 +29,28 @@ impl ControlsView {
             Image::load(&test_engine::paths::images().join("right.png")),
         );
     }
+
+    fn setup_stick(&mut self) {
+        self.stick = make_view_on(self);
+
+        let mut level = Rglica::from_ref(&self.level);
+        self.stick.on_direction_change.subscribe(move |mut direction| {
+            direction.invert_y();
+            level.set_gravity(direction * 10)
+        });
+    }
 }
 
 impl View for ControlsView {
-    fn setup(&mut self) { self.setup_dpad(); }
+    fn setup(&mut self) {
+        self.setup_dpad();
+        self.setup_stick();
+    }
 
     fn layout(&mut self) {
         self.place().as_background();
         self.dpad.place().bottom_left_margin(10);
+        self.stick.place().bottom_right_margin(10);
     }
 
     fn view(&self) -> &ViewBase { &self.base }
