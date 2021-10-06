@@ -13,9 +13,9 @@ impl Level for GameLevel {
         let square = Image::load(&test_engine::paths::images().join("square.png"));
 
         self.add_sprite((0, 0, 1, 1).into());
-        self.add_wall((0, 0, 100, 1).into()).set_image(square);
-        self.add_wall((40, 0, 1, 100).into()).set_image(square);
-        self.add_wall((-40, 0, 1, 100).into()).set_image(square);
+        self.add_wall((0, 0, 1000, 5).into()).set_image(square);
+        self.add_wall((40, 0, 5, 100).into()).set_image(square);
+        self.add_wall((-40, 0, 5, 100).into()).set_image(square);
 
         for i in 0..500 {
             self.add_body((0.1 * i as f32, i * 2, 0.5, 0.5).into());

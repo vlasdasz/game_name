@@ -32,6 +32,7 @@ impl ControlsView {
 
     fn setup_stick(&mut self) {
         self.stick = make_view_on(self);
+        self.stick.flaccid = true;
 
         let mut level = Rglica::from_ref(&self.level);
         self.stick.on_direction_change.subscribe(move |mut direction| {
