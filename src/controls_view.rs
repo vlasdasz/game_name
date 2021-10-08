@@ -18,26 +18,27 @@ pub struct ControlsView {
 
 impl ControlsView {
     fn setup_dpad(&mut self) {
-        self.dpad = make_view_on(self);
+        self.dpad = make_view_on(self, |dpad: &mut DPadView| {
+            dpad.frame_mut().size = (280, 200).into();
 
-        self.dpad.frame_mut().size = (280, 200).into();
-
-        self.dpad.set_images(
-            Image::load(&test_engine::paths::images().join("up.png")),
-            Image::load(&test_engine::paths::images().join("down.png")),
-            Image::load(&test_engine::paths::images().join("left.png")),
-            Image::load(&test_engine::paths::images().join("right.png")),
-        );
+            dpad.set_images(
+                Image::load(&test_engine::paths::images().join("up.png")),
+                Image::load(&test_engine::paths::images().join("down.png")),
+                Image::load(&test_engine::paths::images().join("left.png")),
+                Image::load(&test_engine::paths::images().join("right.png")),
+            );
+        });
     }
 
     fn setup_stick(&mut self) {
-        self.stick = make_view_on(self);
-        self.stick.flaccid = true;
-
         let mut level = Rglica::from_ref(&self.level);
-        self.stick.on_direction_change.subscribe(move |mut direction| {
-            direction.invert_y();
-            level.set_gravity(direction * 10)
+        self.stick = make_view_on(self, |stick: &mut AnalogStickView| {
+            stick.flaccid = true;
+
+            stick.on_direction_change.subscribe(move |mut direction| {
+                direction.invert_y();
+                level.set_gravity(direction * 10)
+            });
         });
     }
 }
