@@ -1,7 +1,10 @@
 use test_engine::{
     screen::GameView,
-    tools::Rglica,
-    ui::{complex::AnalogStickView, make_view_on, DPadView, View, ViewBase},
+    tools::{Event, Rglica},
+    ui::{
+        complex::{AnalogStickView, Slider},
+        make_view_on, DPadView, View, ViewBase,
+    },
     Image, Level,
 };
 
@@ -9,11 +12,12 @@ use crate::game_level::GameLevel;
 
 #[derive(Default)]
 pub struct ControlsView {
-    base:  ViewBase,
-    dpad:  Rglica<DPadView>,
-    stick: Rglica<AnalogStickView>,
-
-    level: GameLevel,
+    base:         ViewBase,
+    dpad:         Rglica<DPadView>,
+    stick:        Rglica<AnalogStickView>,
+    level:        GameLevel,
+    scale_slider: Rglica<Slider>,
+    set_scale:    Event<f32>,
 }
 
 impl ControlsView {
@@ -27,6 +31,17 @@ impl ControlsView {
                 Image::load(&test_engine::paths::images().join("left.png")),
                 Image::load(&test_engine::paths::images().join("right.png")),
             );
+        });
+    }
+
+    fn setup_slider(&mut self) {
+        let mut this = Rglica::from_ref(self);
+        self.scale_slider = make_view_on(self, move |slider: &mut Slider| {
+            slider.multiplier = 10.0;
+            slider.frame_mut().size = (50, 280).into();
+            slider.on_change.subscribe(move |scale| {
+                this.set_scale.trigger(scale);
+            });
         });
     }
 
@@ -46,6 +61,7 @@ impl ControlsView {
 impl View for ControlsView {
     fn setup(&mut self) {
         self.setup_dpad();
+        self.setup_slider();
         self.setup_stick();
     }
 
@@ -53,14 +69,26 @@ impl View for ControlsView {
         self.place().as_background();
         self.dpad.place().bottom_left_margin(10);
         self.stick.place().bottom_right_margin(10);
+        self.scale_slider.place().right();
     }
 
-    fn view(&self) -> &ViewBase { &self.base }
+    fn view(&self) -> &ViewBase {
+        &self.base
+    }
 
-    fn view_mut(&mut self) -> &mut ViewBase { &mut self.base }
+    fn view_mut(&mut self) -> &mut ViewBase {
+        &mut self.base
+    }
 }
 
 impl GameView for ControlsView {
-    fn level(&self) -> &dyn Level { &self.level }
-    fn level_mut(&mut self) -> &mut dyn Level { &mut self.level }
+    fn level(&self) -> &dyn Level {
+        &self.level
+    }
+    fn level_mut(&mut self) -> &mut dyn Level {
+        &mut self.level
+    }
+    fn set_scale(&mut self) -> &mut Event<f32> {
+        &mut self.set_scale
+    }
 }
