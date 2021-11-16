@@ -37,7 +37,7 @@ impl ControlsView {
     fn setup_slider(&mut self) {
         let mut this = Rglica::from_ref(self);
         self.scale_slider = make_view_on(self, move |slider: &mut Slider| {
-            slider.multiplier = 10.0;
+            slider.multiplier = 5.0;
             slider.frame_mut().size = (50, 280).into();
             slider.on_change.subscribe(move |scale| {
                 this.set_scale.trigger(scale);

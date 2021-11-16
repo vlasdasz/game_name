@@ -10,15 +10,12 @@ impl Level for GameLevel {
         self.base.player = self.add_body((0, 10, 17.0 / 6.0, 28.0 / 6.0).into());
         self.base.player.lock_rotations();
 
-        let square = Image::load(&test_engine::paths::images().join("square.png"));
-
         self.add_sprite((0, 0, 1, 1).into());
-        self.add_wall((0, 0, 1000, 5).into()).set_image(square.clone());
-        self.add_wall((40, 0, 5, 100).into()).set_image(square.clone());
-        self.add_wall((-40, 0, 5, 100).into()).set_image(square);
+
+        self.make_walls();
 
         for i in 0..500 {
-            self.add_body((0.1 * i as f32, i * 2, 0.5, 0.5).into());
+            self.add_body((0.1 * i as f32, i as f32 * 0.5, 0.5, 0.5).into());
         }
     }
 
@@ -28,5 +25,31 @@ impl Level for GameLevel {
 
     fn level_mut(&mut self) -> &mut LevelBase {
         &mut self.base
+    }
+}
+
+impl GameLevel {
+    fn make_walls(&mut self) {
+        let square = Image::load(&test_engine::paths::images().join("square.png"));
+
+        let width = 280;
+        let wall_width = 10;
+
+        self.add_wall((width, wall_width).into())
+            .set_image(square.clone());
+
+        self.add_wall((-width, width, wall_width, width).into())
+            .set_image(square.clone());
+
+        self.add_wall((width, width, wall_width, width).into())
+            .set_image(square.clone());
+
+        self.add_wall((0, width * 2, width, 5).into())
+            .set_image(square.clone());
+
+        self.add_wall((40, 0, 5, 100).into())
+            .set_image(square.clone());
+
+        self.add_wall((-40, 0, 5, 100).into()).set_image(square);
     }
 }
