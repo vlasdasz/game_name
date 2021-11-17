@@ -4,11 +4,14 @@ use test_engine::{sprites::SpritesDrawer, Image, Level, LevelBase, Sprite};
 
 #[derive(Default)]
 pub struct GameLevel {
-    base: LevelBase,
+    scale: f32,
+    base:  LevelBase,
 }
 
 impl Level for GameLevel {
     fn setup(&mut self) {
+        self.scale = 1.0;
+
         self.base.player = self.add_body((0, 10, 17.0 / 6.0, 28.0 / 6.0).into());
         self.base.player.lock_rotations();
 
@@ -31,6 +34,16 @@ impl Level for GameLevel {
 
     fn drawer(&self) -> &dyn SpritesDrawer {
         self.base.drawer.deref()
+    }
+
+    fn on_key_pressed(&mut self, key: String) {
+        if key == "-" {
+            self.scale /= 2.0;
+        } else if key == "=" {
+            self.scale *= 2.0;
+        }
+
+        self.drawer().set_scale(self.scale);
     }
 }
 
