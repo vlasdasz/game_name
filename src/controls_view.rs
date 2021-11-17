@@ -1,23 +1,19 @@
-use test_engine::{
-    screen::GameView,
-    tools::{Event, Rglica},
-    ui::{
+use std::rc::Rc;
+use std::default::default;
+
+use test_engine::{Image, Level, screen::GameView, sprites::{DummyDrawer, SpritesDrawer}, tools::{Event, Rglica}, ui::{
         complex::{AnalogStickView, Slider},
         make_view_on, DPadView, View, ViewBase,
-    },
-    Image, Level,
-};
-
+    }};
 use crate::game_level::GameLevel;
 
-#[derive(Default)]
 pub struct ControlsView {
     base:         ViewBase,
     dpad:         Rglica<DPadView>,
     stick:        Rglica<AnalogStickView>,
     level:        GameLevel,
     scale_slider: Rglica<Slider>,
-    set_scale:    Event<f32>,
+    drawer:       Rc<dyn SpritesDrawer>,
 }
 
 impl ControlsView {
@@ -40,7 +36,7 @@ impl ControlsView {
             slider.multiplier = 5.0;
             slider.frame_mut().size = (50, 280).into();
             slider.on_change.subscribe(move |scale| {
-                this.set_scale.trigger(scale);
+                this.drawer.set_scale(scale);
             });
         });
     }
@@ -52,7 +48,8 @@ impl ControlsView {
 
             stick.on_direction_change.subscribe(move |mut direction| {
                 direction.invert_y();
-                level.set_gravity(direction * 10)
+                level.set_gravity(direction * 10);
+                level.drawer().set_camera_rotation(direction.angle());
             });
         });
     }
@@ -88,7 +85,21 @@ impl GameView for ControlsView {
     fn level_mut(&mut self) -> &mut dyn Level {
         &mut self.level
     }
-    fn set_scale(&mut self) -> &mut Event<f32> {
-        &mut self.set_scale
+    fn set_drawer(&mut self, drawer: Rc<dyn SpritesDrawer>) {
+        self.drawer = drawer.clone();
+        self.level.level_mut().drawer = drawer;
+    }
+}
+
+impl Default for ControlsView {
+    fn default() -> Self {
+        Self {
+            base:         default(),
+            dpad:         default(),
+            stick:        default(),
+            level:        default(),
+            scale_slider: default(),
+            drawer: Rc::new(DummyDrawer::default()),
+        }
     }
 }

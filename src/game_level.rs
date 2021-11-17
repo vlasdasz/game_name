@@ -1,4 +1,6 @@
-use test_engine::{Image, Level, LevelBase, Sprite};
+use std::ops::Deref;
+
+use test_engine::{Image, Level, LevelBase, Sprite, sprites::SpritesDrawer};
 
 #[derive(Default)]
 pub struct GameLevel {
@@ -25,6 +27,10 @@ impl Level for GameLevel {
 
     fn level_mut(&mut self) -> &mut LevelBase {
         &mut self.base
+    }
+
+    fn drawer(&self) -> &dyn SpritesDrawer {
+        self.base.drawer.deref()
     }
 }
 

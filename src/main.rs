@@ -1,3 +1,5 @@
+#![feature(default_free_fn)]
+
 mod controls_view;
 mod game_level;
 
