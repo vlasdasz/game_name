@@ -20,11 +20,10 @@ Desktop:
 [![Lin][LIN1]][LLIN]
 [![Win][WIN1]][LWIN]
 
-[comment]: <> (Mobile:)
+Mobile:
 
-[comment]: <> ([![IOS][IOSS1]][LIOSD])
-
-[comment]: <> ([![ANDR][ANDR1]][ANDR])
+[![IOS][IOSS1]][LIOSD]
+[![ANDR][ANDR1]][ANDR]
 
 Raspberry Pi:
 
