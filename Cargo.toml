@@ -12,3 +12,6 @@ crate-type = ["rlib", "staticlib"]
 
 [dependencies]
 test_engine = { path = ".rdeps/test_engine/test_engine" }
+
+[profile.dev.package."*"]
+opt-level = 3
