@@ -1,10 +1,16 @@
-use std::rc::Rc;
-use std::default::default;
+use std::{default::default, rc::Rc};
 
-use test_engine::{Image, Level, screen::GameView, sprites::{DummyDrawer, SpritesDrawer}, tools::{Event, Rglica}, ui::{
+use test_engine::{
+    screen::GameView,
+    sprites::{DummyDrawer, SpritesDrawer},
+    tools::Rglica,
+    ui::{
         complex::{AnalogStickView, Slider},
         make_view_on, DPadView, View, ViewBase,
-    }};
+    },
+    Image, Level,
+};
+
 use crate::game_level::GameLevel;
 
 pub struct ControlsView {
@@ -31,7 +37,7 @@ impl ControlsView {
     }
 
     fn setup_slider(&mut self) {
-        let mut this = Rglica::from_ref(self);
+        let this = Rglica::from_ref(self);
         self.scale_slider = make_view_on(self, move |slider: &mut Slider| {
             slider.multiplier = 5.0;
             slider.frame_mut().size = (50, 280).into();
@@ -99,7 +105,7 @@ impl Default for ControlsView {
             stick:        default(),
             level:        default(),
             scale_slider: default(),
-            drawer: Rc::new(DummyDrawer::default()),
+            drawer:       Rc::new(DummyDrawer::default()),
         }
     }
 }

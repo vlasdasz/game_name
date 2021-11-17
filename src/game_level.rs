@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use test_engine::{Image, Level, LevelBase, Sprite, sprites::SpritesDrawer};
+use test_engine::{sprites::SpritesDrawer, Image, Level, LevelBase, Sprite};
 
 #[derive(Default)]
 pub struct GameLevel {
