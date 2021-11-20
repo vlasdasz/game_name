@@ -109,3 +109,4 @@ tools
 .rdeps
 
 NDK/
+temp/
