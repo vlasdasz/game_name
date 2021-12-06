@@ -26,7 +26,7 @@ pub extern "C" fn create_screen() {
     unsafe {
         SCREEN = Box::into_raw(Box::new(
             Screen::new(default())
-                .add_view(ControlsView::boxed())
+                .set_view(ControlsView::boxed())
                 .add_debug_view(),
         ));
     }

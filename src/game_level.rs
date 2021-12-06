@@ -24,6 +24,16 @@ impl Level for GameLevel {
         }
     }
 
+    fn on_key_pressed(&mut self, key: String) {
+        if key == "-" {
+            self.scale /= 2.0;
+        } else if key == "=" {
+            self.scale *= 2.0;
+        }
+
+        self.drawer().set_scale(self.scale);
+    }
+
     fn level(&self) -> &LevelBase {
         &self.base
     }
@@ -34,16 +44,6 @@ impl Level for GameLevel {
 
     fn drawer(&self) -> &dyn SpritesDrawer {
         self.base.drawer.deref()
-    }
-
-    fn on_key_pressed(&mut self, key: String) {
-        if key == "-" {
-            self.scale /= 2.0;
-        } else if key == "=" {
-            self.scale *= 2.0;
-        }
-
-        self.drawer().set_scale(self.scale);
     }
 }
 
