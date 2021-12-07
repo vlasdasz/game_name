@@ -1,8 +1,10 @@
 use std::ops::Deref;
 
-use test_engine::assets::Assets;
-use test_engine::{sprites::SpritesDrawer, Image, Level, LevelBase, Sprite};
-use test_engine::sprites::Control;
+use test_engine::{
+    assets::Assets,
+    sprites::{Control, SpritesDrawer},
+    Image, Level, LevelBase, Sprite,
+};
 
 #[derive(Default)]
 pub struct GameLevel {
@@ -27,7 +29,6 @@ impl Level for GameLevel {
     }
 
     fn on_key_pressed(&mut self, key: String) {
-
         if key == "-" {
             self.scale /= 2.0;
         } else if key == "=" {

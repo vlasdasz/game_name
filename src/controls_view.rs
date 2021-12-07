@@ -1,12 +1,12 @@
-use std::{default::default, rc::Rc};
+use std::rc::Rc;
 
 use test_engine::{
     screen::GameView,
-    sprites::{DummyDrawer, SpritesDrawer, Control},
-    tools::Rglica,
+    sprites::{Control, DummyDrawer, SpritesDrawer},
+    tools::{Rglica, ToRglica},
     ui::{
         complex::{AnalogStickView, Slider},
-        make_view_on, DPadView, View, ViewBase,
+        init_view_with_frame, make_view_on, DPadView, Label, View, ViewBase,
     },
     Image, Level,
 };
@@ -14,12 +14,13 @@ use test_engine::{
 use crate::game_level::GameLevel;
 
 pub struct ControlsView {
-    base:         ViewBase,
-    dpad:         Rglica<DPadView>,
-    stick:        Rglica<AnalogStickView>,
-    level:        GameLevel,
-    scale_slider: Rglica<Slider>,
-    drawer:       Rc<dyn SpritesDrawer>,
+    base:          ViewBase,
+    dpad:          Rglica<DPadView>,
+    stick:         Rglica<AnalogStickView>,
+    level:         GameLevel,
+    scale_slider:  Rglica<Slider>,
+    gravity_label: Rglica<Label>,
+    drawer:        Rc<dyn SpritesDrawer>,
 }
 
 impl ControlsView {
@@ -48,23 +49,29 @@ impl ControlsView {
     }
 
     fn setup_stick(&mut self) {
-        let mut level = Rglica::from_ref(&self.level);
+        let mut this = self.to_rglica();
         self.stick = make_view_on(self, |stick: &mut AnalogStickView| {
             stick.flaccid = true;
 
             stick.on_direction_change.subscribe(move |mut direction| {
                 direction.invert_y();
-                level.set_gravity(direction * 10);
-                level.drawer().set_camera_rotation(direction.angle());
+                this.level.set_gravity(direction * 10);
+                this.level.drawer().set_camera_rotation(direction.angle());
+                let gravity = this.level().gravity();
+                this.gravity_label.set_text(format!("gravity: {:?}", gravity));
             });
         });
     }
 
     fn setup_level(&mut self) {
         let mut player = self.level_mut().player().clone();
-        self.dpad.on_press.subscribe(move |dir|{
-            player.move_by_direction(dir)
-        });
+        self.dpad
+            .on_press
+            .subscribe(move |dir| player.move_by_direction(dir));
+    }
+
+    fn setup_ui(&mut self) {
+        self.gravity_label = init_view_with_frame((100, 100).into(), self);
     }
 }
 
@@ -74,6 +81,7 @@ impl View for ControlsView {
         self.setup_slider();
         self.setup_stick();
         self.setup_level();
+        self.setup_ui();
     }
 
     fn layout(&mut self) {
@@ -81,6 +89,7 @@ impl View for ControlsView {
         self.dpad.place().bottom_left_margin(10);
         self.stick.place().bottom_right_margin(10);
         self.scale_slider.place().right();
+        self.gravity_label.place().top_right_margin(10);
     }
 
     fn view(&self) -> &ViewBase {
@@ -108,12 +117,13 @@ impl GameView for ControlsView {
 impl Default for ControlsView {
     fn default() -> Self {
         Self {
-            base:         default(),
-            dpad:         default(),
-            stick:        default(),
-            level:        default(),
-            scale_slider: default(),
-            drawer:       Rc::new(DummyDrawer::default()),
+            base:          Default::default(),
+            dpad:          Default::default(),
+            stick:         Default::default(),
+            level:         Default::default(),
+            scale_slider:  Default::default(),
+            gravity_label: Default::default(),
+            drawer:        Rc::new(DummyDrawer::default()),
         }
     }
 }
