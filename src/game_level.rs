@@ -1,6 +1,8 @@
 use std::ops::Deref;
 
+use test_engine::assets::Assets;
 use test_engine::{sprites::SpritesDrawer, Image, Level, LevelBase, Sprite};
+use test_engine::sprites::Control;
 
 #[derive(Default)]
 pub struct GameLevel {
@@ -13,7 +15,7 @@ impl Level for GameLevel {
         self.scale = 1.0;
 
         self.base.player = self.add_body((0, 10, 17.0 / 6.0, 28.0 / 6.0).into());
-        self.base.player.lock_rotations();
+        self.base.player.set_image(Assets::image("frisk.png"));
 
         self.add_sprite((0, 0, 1, 1).into());
 
@@ -25,6 +27,7 @@ impl Level for GameLevel {
     }
 
     fn on_key_pressed(&mut self, key: String) {
+
         if key == "-" {
             self.scale /= 2.0;
         } else if key == "=" {
@@ -32,6 +35,7 @@ impl Level for GameLevel {
         }
 
         self.drawer().set_scale(self.scale);
+        self.player().move_by_key(key);
     }
 
     fn level(&self) -> &LevelBase {

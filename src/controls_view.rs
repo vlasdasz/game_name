@@ -2,7 +2,7 @@ use std::{default::default, rc::Rc};
 
 use test_engine::{
     screen::GameView,
-    sprites::{DummyDrawer, SpritesDrawer},
+    sprites::{DummyDrawer, SpritesDrawer, Control},
     tools::Rglica,
     ui::{
         complex::{AnalogStickView, Slider},
@@ -59,6 +59,13 @@ impl ControlsView {
             });
         });
     }
+
+    fn setup_level(&mut self) {
+        let mut player = self.level_mut().player().clone();
+        self.dpad.on_press.subscribe(move |dir|{
+            player.move_by_direction(dir)
+        });
+    }
 }
 
 impl View for ControlsView {
@@ -66,6 +73,7 @@ impl View for ControlsView {
         self.setup_dpad();
         self.setup_slider();
         self.setup_stick();
+        self.setup_level();
     }
 
     fn layout(&mut self) {
