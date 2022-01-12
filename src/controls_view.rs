@@ -1,7 +1,6 @@
 use std::rc::Rc;
 
 use test_engine::{
-    screen::GameView,
     sprites::{Control, DummyDrawer, SpritesDrawer},
     tools::{Rglica, ToRglica},
     ui::{
@@ -10,6 +9,7 @@ use test_engine::{
     },
     Image, Level,
 };
+use test_engine::ui_layer::GameView;
 
 use crate::game_level::GameLevel;
 

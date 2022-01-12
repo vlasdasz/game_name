@@ -8,8 +8,8 @@ use test_engine::{tools::Boxed, Screen};
 use crate::controls_view::ControlsView;
 
 fn main() {
-    Screen::new((1000, 680).into())
-        .set_view(ControlsView::boxed())
-        .add_debug_view()
-        .start_main_loop();
+    let mut screen = Screen::new((1000, 680).into());
+    screen.ui.set_view(ControlsView::boxed());
+    screen.ui.add_debug_view();
+    screen.start_main_loop();
 }
