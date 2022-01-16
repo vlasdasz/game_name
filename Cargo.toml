@@ -11,6 +11,8 @@ name = "game_name"
 crate-type = ["rlib", "staticlib"]
 
 [dependencies]
+tokio = { version = "1.15", features = ["full"] }
+
 test_engine = { path = ".rdeps/test_engine/test_engine" }
 
 [profile.dev.package."*"]

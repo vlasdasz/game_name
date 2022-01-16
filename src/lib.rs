@@ -1,3 +1,6 @@
+#![allow(incomplete_features)]
+#![feature(result_option_inspect)]
+
 use std::{
     os::raw::{c_float, c_int, c_ulong},
     ptr,

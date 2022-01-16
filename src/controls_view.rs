@@ -2,14 +2,15 @@ use std::rc::Rc;
 
 use test_engine::{
     sprites::{Control, DummyDrawer, SpritesDrawer},
-    tools::{Rglica, ToRglica},
+    tools::{test::generator::Generator, Rglica, ToRglica},
     ui::{
         complex::{AnalogStickView, Slider},
         init_view_with_frame, make_view_on, DPadView, Label, View, ViewBase,
     },
+    ui_layer::GameView,
     Image, Level,
 };
-use test_engine::ui_layer::GameView;
+use tokio::sync::mpsc::Receiver;
 
 use crate::game_level::GameLevel;
 
@@ -21,6 +22,9 @@ pub struct ControlsView {
     scale_slider:  Rglica<Slider>,
     gravity_label: Rglica<Label>,
     drawer:        Rc<dyn SpritesDrawer>,
+
+    generator_label: Rglica<Label>,
+    generate_recv:   Receiver<u32>,
 }
 
 impl ControlsView {
@@ -58,12 +62,15 @@ impl ControlsView {
                 this.level.set_gravity(direction * 10);
                 this.level.drawer().set_camera_rotation(direction.angle());
                 let gravity = this.level().gravity();
-                this.gravity_label.set_text(format!("gravity: {:?}", gravity));
+                this.gravity_label
+                    .set_text(format!("gravity: {:?}", gravity));
             });
         });
     }
 
     fn setup_level(&mut self) {
+        self.level_mut().setup();
+
         let mut player = self.level_mut().player().clone();
         self.dpad
             .on_press
@@ -72,6 +79,7 @@ impl ControlsView {
 
     fn setup_ui(&mut self) {
         self.gravity_label = init_view_with_frame((100, 100).into(), self);
+        self.generator_label = init_view_with_frame((10, 150, 200, 20).into(), self);
     }
 }
 
@@ -99,6 +107,12 @@ impl View for ControlsView {
     fn view_mut(&mut self) -> &mut ViewBase {
         &mut self.base
     }
+
+    fn update(&mut self) {
+        let _ = self.generate_recv.try_recv().inspect(|val| {
+            self.generator_label.set_text(val);
+        });
+    }
 }
 
 impl GameView for ControlsView {
@@ -124,6 +138,9 @@ impl Default for ControlsView {
             scale_slider:  Default::default(),
             gravity_label: Default::default(),
             drawer:        Rc::new(DummyDrawer::default()),
+
+            generator_label: Default::default(),
+            generate_recv:   Generator::generate(100),
         }
     }
 }
