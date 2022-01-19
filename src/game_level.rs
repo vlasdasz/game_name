@@ -3,7 +3,7 @@ use std::ops::Deref;
 use test_engine::{
     assets::Assets,
     sprites::{Control, SpritesDrawer},
-    Image, Level, LevelBase, Sprite,
+    Image, Level, LevelBase, Sprite, maze::{Grid, cell::Cell}, gm::Point,
 };
 
 #[derive(Default)]
@@ -75,5 +75,34 @@ impl GameLevel {
             .set_image(square.clone());
 
         self.add_wall((-40, 0, 5, 100).into()).set_image(square);
+    }
+
+    pub fn display_grid(&mut self, grid: &Grid) {
+        for x in 0..grid.len() {
+            let row = &grid[x];
+            for y in 0..row.len() {
+
+                let cell = &row[y];
+                self.add_cell(cell, x, y);
+            }
+        }
+    }
+
+    fn add_cell(&mut self, cell: &Cell, x: usize, y: usize) {
+        const LENGHT: f32 = 10.0;
+        const WIDTH: f32 = 0.5;
+
+        let origin: Point = (LENGHT * x as f32, LENGHT * y as f32).into();
+
+        if cell.left {
+            let rect = (
+                origin.x + LENGHT / 2.0, 
+                origin.y + WIDTH / 2.0, 
+                LENGHT, 
+                WIDTH
+            ).into();
+
+            self.add_sprite(rect);
+        }
     }
 }

@@ -2,13 +2,13 @@ use std::rc::Rc;
 
 use test_engine::{
     sprites::{Control, DummyDrawer, SpritesDrawer},
-    tools::{test::generator::Generator, Rglica, ToRglica},
+    tools::{Rglica, ToRglica},
     ui::{
         complex::{AnalogStickView, Slider},
         init_view_with_frame, make_view_on, DPadView, Label, View, ViewBase,
     },
     ui_layer::GameView,
-    Image, Level,
+    Image, Level, maze::{Grid, maker::Maker},
 };
 use tokio::sync::mpsc::Receiver;
 
@@ -23,8 +23,7 @@ pub struct ControlsView {
     gravity_label: Rglica<Label>,
     drawer:        Rc<dyn SpritesDrawer>,
 
-    generator_label: Rglica<Label>,
-    generate_recv:   Receiver<u32>,
+    grid_recv: Receiver<Grid>,
 }
 
 impl ControlsView {
@@ -79,7 +78,6 @@ impl ControlsView {
 
     fn setup_ui(&mut self) {
         self.gravity_label = init_view_with_frame((100, 100).into(), self);
-        self.generator_label = init_view_with_frame((10, 150, 200, 20).into(), self);
     }
 }
 
@@ -100,18 +98,18 @@ impl View for ControlsView {
         self.gravity_label.place().top_right_margin(10);
     }
 
+    fn update(&mut self) {
+        let _ = self.grid_recv.try_recv().inspect(|val| {
+            self.level.display_grid(val)
+        });
+    }
+
     fn view(&self) -> &ViewBase {
         &self.base
     }
 
     fn view_mut(&mut self) -> &mut ViewBase {
         &mut self.base
-    }
-
-    fn update(&mut self) {
-        let _ = self.generate_recv.try_recv().inspect(|val| {
-            self.generator_label.set_text(val);
-        });
     }
 }
 
@@ -138,9 +136,7 @@ impl Default for ControlsView {
             scale_slider:  Default::default(),
             gravity_label: Default::default(),
             drawer:        Rc::new(DummyDrawer::default()),
-
-            generator_label: Default::default(),
-            generate_recv:   Generator::generate(100),
+            grid_recv: Maker::generate(),
         }
     }
 }
