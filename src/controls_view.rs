@@ -1,6 +1,7 @@
 use std::rc::Rc;
 
 use test_engine::{
+    maze::{maker::Maker, Grid},
     sprites::{Control, DummyDrawer, SpritesDrawer},
     tools::{Rglica, ToRglica},
     ui::{
@@ -8,7 +9,7 @@ use test_engine::{
         init_view_with_frame, make_view_on, DPadView, Label, View, ViewBase,
     },
     ui_layer::GameView,
-    Image, Level, maze::{Grid, maker::Maker},
+    Image, Level,
 };
 use tokio::sync::mpsc::Receiver;
 
@@ -99,9 +100,10 @@ impl View for ControlsView {
     }
 
     fn update(&mut self) {
-        let _ = self.grid_recv.try_recv().inspect(|val| {
-            self.level.display_grid(val)
-        });
+        let _ = self
+            .grid_recv
+            .try_recv()
+            .inspect(|val| self.level.display_grid(val));
     }
 
     fn view(&self) -> &ViewBase {
@@ -136,7 +138,7 @@ impl Default for ControlsView {
             scale_slider:  Default::default(),
             gravity_label: Default::default(),
             drawer:        Rc::new(DummyDrawer::default()),
-            grid_recv: Maker::generate(),
+            grid_recv:     Maker::generate(),
         }
     }
 }

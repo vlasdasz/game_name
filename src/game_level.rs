@@ -2,8 +2,10 @@ use std::ops::Deref;
 
 use test_engine::{
     assets::Assets,
+    gm::Point,
+    maze::{cell::Cell, Grid},
     sprites::{Control, SpritesDrawer},
-    Image, Level, LevelBase, Sprite, maze::{Grid, cell::Cell}, gm::Point,
+    Image, Level, LevelBase, Sprite,
 };
 
 #[derive(Default)]
@@ -81,7 +83,6 @@ impl GameLevel {
         for x in 0..grid.len() {
             let row = &grid[x];
             for y in 0..row.len() {
-
                 let cell = &row[y];
                 self.add_cell(cell, x, y);
             }
@@ -96,11 +97,12 @@ impl GameLevel {
 
         if cell.left {
             let rect = (
-                origin.x + LENGHT / 2.0, 
-                origin.y + WIDTH / 2.0, 
-                LENGHT, 
-                WIDTH
-            ).into();
+                origin.x + LENGHT / 2.0,
+                origin.y + WIDTH / 2.0,
+                LENGHT,
+                WIDTH,
+            )
+                .into();
 
             self.add_sprite(rect);
         }
