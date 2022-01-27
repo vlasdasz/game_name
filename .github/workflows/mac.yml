@@ -12,8 +12,9 @@ env:
 jobs:
   build:
     runs-on: macos-latest
-    #runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: true
       - name: Mac
-        run: python3 build.py
+        run: cargo build

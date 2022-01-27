@@ -2,8 +2,8 @@ use std::rc::Rc;
 
 use test_engine::{
     maze::{maker::Maker, Grid},
+    rtools::{Rglica, ToRglica},
     sprites::{Control, DummyDrawer, SpritesDrawer},
-    tools::{Rglica, ToRglica},
     ui::{
         complex::{AnalogStickView, Slider},
         init_view_with_frame, make_view_on, DPadView, Label, View, ViewBase,

@@ -1,14 +1,12 @@
-use std::ops::Deref;
-
 use test_engine::{
     assets::Assets,
     gm::Point,
     maze::{cell::Cell, Grid},
-    sprites::{Control, SpritesDrawer},
+    sprites::Control,
     Image, Level, LevelBase, Sprite,
 };
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct GameLevel {
     scale: f32,
     base:  LevelBase,
@@ -48,10 +46,6 @@ impl Level for GameLevel {
     fn level_mut(&mut self) -> &mut LevelBase {
         &mut self.base
     }
-
-    fn drawer(&self) -> &dyn SpritesDrawer {
-        self.base.drawer.deref()
-    }
 }
 
 impl GameLevel {
@@ -80,10 +74,8 @@ impl GameLevel {
     }
 
     pub fn display_grid(&mut self, grid: &Grid) {
-        for x in 0..grid.len() {
-            let row = &grid[x];
-            for y in 0..row.len() {
-                let cell = &row[y];
+        for (x, row) in grid.iter().enumerate() {
+            for (y, cell) in row.iter().enumerate() {
                 self.add_cell(cell, x, y);
             }
         }

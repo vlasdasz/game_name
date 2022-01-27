@@ -4,7 +4,7 @@
 mod controls_view;
 mod game_level;
 
-use test_engine::{tools::Boxed, Screen};
+use test_engine::{rtools::Boxed, Screen};
 
 use crate::controls_view::ControlsView;
 

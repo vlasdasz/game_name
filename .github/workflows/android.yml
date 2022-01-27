@@ -8,11 +8,14 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  ANDROID_BUILD: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: true
       - name: android
         run: python3 build.py android

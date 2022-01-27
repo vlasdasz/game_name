@@ -14,5 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: linux
-        run: python3 build.py
+        with:
+          submodules: true
+      - name: Install deps
+        run: |
+          chmod +x linux_deps.sh 
+          sudo ./linux_deps.sh 
+      - name: Build
+        run:  cargo build

@@ -1,4 +1,5 @@
 #![allow(incomplete_features)]
+#![allow(clippy::missing_safety_doc)]
 #![feature(result_option_inspect)]
 
 use std::{
@@ -8,7 +9,7 @@ use std::{
 
 use test_engine::{
     gm::Size,
-    tools::Boxed,
+    rtools::Boxed,
     ui::{input::touch::Event, Touch},
     Screen,
 };
