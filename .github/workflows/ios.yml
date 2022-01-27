@@ -18,8 +18,8 @@ jobs:
           submodules: true
       - name: Install deps
         run: |
-          chmod +x ios_deps.sh
-          ./ios_deps.sh
+          chmod +x test_engine/ios_deps.sh
+          ./test_engine/ios_deps.sh
       - name: Build
         run: |
           cargo lipo --release
