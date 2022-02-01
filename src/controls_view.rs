@@ -1,14 +1,15 @@
 use std::rc::Rc;
 
 use test_engine::{
+    game_view::GameView,
     maze::{maker::Maker, Grid},
     rtools::{Rglica, ToRglica},
-    sprites::{Control, DummyDrawer, SpritesDrawer},
+    sprites::{Control, SpritesDrawer},
     ui::{
         complex::{AnalogStickView, Slider},
-        init_view_with_frame, make_view_on, DPadView, Label, View, ViewBase,
+        view_base::{init_view_with_frame, make_view_on, ViewBase},
+        DPadView, Label, View,
     },
-    ui_layer::GameView,
     Image, Level,
 };
 use tokio::sync::mpsc::Receiver;
@@ -22,7 +23,6 @@ pub struct ControlsView {
     level:         GameLevel,
     scale_slider:  Rglica<Slider>,
     gravity_label: Rglica<Label>,
-    drawer:        Rc<dyn SpritesDrawer>,
 
     grid_recv: Receiver<Grid>,
 }
@@ -47,7 +47,7 @@ impl ControlsView {
             slider.multiplier = 5.0;
             slider.frame_mut().size = (50, 280).into();
             slider.on_change.subscribe(move |scale| {
-                this.drawer.set_scale(scale);
+                this.level.drawer().set_scale(scale);
             });
         });
     }
@@ -123,7 +123,6 @@ impl GameView for ControlsView {
         &mut self.level
     }
     fn set_drawer(&mut self, drawer: Rc<dyn SpritesDrawer>) {
-        self.drawer = drawer.clone();
         self.level.level_mut().drawer = drawer;
     }
 }
@@ -137,7 +136,6 @@ impl Default for ControlsView {
             level:         Default::default(),
             scale_slider:  Default::default(),
             gravity_label: Default::default(),
-            drawer:        Rc::new(DummyDrawer::default()),
             grid_recv:     Maker::generate(),
         }
     }
