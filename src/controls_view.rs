@@ -1,5 +1,3 @@
-use std::rc::Rc;
-
 use test_engine::{
     game_view::GameView,
     maze::{maker::Maker, Grid},
@@ -7,12 +5,11 @@ use test_engine::{
     sprites::{Control, SpritesDrawer},
     ui::{
         complex::{AnalogStickView, Slider},
-        view_base::{make_view_on, ViewBase},
+        view_base::{add_view_with_frame, make_view_on, ViewBase},
         DPadView, Label, View,
     },
     Image, Level,
 };
-use test_engine::ui::view_base::add_view_with_frame;
 use tokio::sync::mpsc::Receiver;
 
 use crate::game_level::GameLevel;

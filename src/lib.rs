@@ -8,6 +8,7 @@ use std::{
 };
 
 use test_engine::{
+    gl_wrapper::monitor::Monitor,
     gm::Size,
     rtools::Boxed,
     ui::{input::touch::Event, Touch},
@@ -21,16 +22,21 @@ mod controls_view;
 mod game_level;
 
 static mut SCREEN: *mut Screen = ptr::null_mut();
+static mut MONITOR: *mut Monitor = ptr::null_mut();
+
 static mut RUNTIME: Option<Runtime> = None;
 
 #[no_mangle]
-pub unsafe extern "C" fn create_screen() {
+pub unsafe extern "C" fn create_screen(width: c_int, height: c_int) {
     RUNTIME = Some(tokio::runtime::Runtime::new().unwrap());
 
     RUNTIME.as_ref().unwrap().block_on(async {
-        let mut screen = Box::new(Screen::new(Default::default()));
+        let mut screen = Box::new(Screen::new((width, height).into()));
+
         screen.ui.set_view(ControlsView::boxed());
         screen.ui.add_debug_view();
+
+        screen.add_monitor(MONITOR.as_ref().unwrap().clone());
 
         SCREEN = Box::into_raw(screen);
     });
@@ -63,4 +69,32 @@ pub unsafe extern "C" fn on_touch(id: c_ulong, x: c_float, y: c_float, event: c_
             event:    Event::from_int(event),
         })
     });
+}
+
+#[no_mangle]
+pub extern "C" fn set_monitor(
+    ppi: c_int,
+    scale: c_float,
+    refresh_rate: c_int,
+    resolution_x: c_int,
+    resolution_y: c_int,
+    width: c_float,
+    height: c_float,
+    diagonal: c_float,
+) {
+    let monitor = Monitor::new(
+        "Phone screen".into(),
+        ppi as _,
+        scale,
+        refresh_rate as _,
+        (resolution_x, resolution_y).into(),
+        (width, height).into(),
+        diagonal as _,
+    );
+
+    dbg!(&monitor);
+
+    unsafe {
+        MONITOR = Box::into_raw(Box::new(monitor));
+    }
 }

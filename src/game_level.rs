@@ -1,11 +1,9 @@
 use test_engine::{
     assets::Assets,
-    gm::Point,
+    gm::{Point, Rect},
     maze::{cell::Cell, Grid},
-    sprites::Control,
     Image, Level, LevelBase, Sprite,
 };
-use test_engine::gm::Rect;
 
 #[derive(Default, Debug)]
 pub struct GameLevel {
@@ -96,7 +94,7 @@ impl GameLevel {
             )
                 .into();
 
-           // self.add_sprite(rect);
+            // self.add_sprite(rect);
         }
     }
 }

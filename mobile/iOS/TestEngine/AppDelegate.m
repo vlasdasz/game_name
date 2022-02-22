@@ -21,8 +21,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setup];
-    create_screen();
+    
+    CGRect screen = [[UIScreen mainScreen] bounds];
+
+    set_monitor(326,
+                [UIScreen mainScreen].scale,
+                60,
+                self.view.frame.size.width,
+                self.view.frame.size.height,
+                300,
+                300,
+                7);
+    
+    create_screen(screen.size.width, screen.size.height);
 }
+
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
