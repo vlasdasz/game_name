@@ -5,6 +5,7 @@ use test_engine::{
     sprites::Control,
     Image, Level, LevelBase, Sprite,
 };
+use test_engine::gm::Rect;
 
 #[derive(Default, Debug)]
 pub struct GameLevel {
@@ -18,8 +19,6 @@ impl Level for GameLevel {
 
         self.base.player = self.add_body((0, 10, 17.0 / 6.0, 28.0 / 6.0).into());
         self.base.player.set_image(Assets::image("frisk.png"));
-
-        self.add_sprite((0, 0, 1, 1).into());
 
         self.make_walls();
 
@@ -35,8 +34,9 @@ impl Level for GameLevel {
             self.scale *= 2.0;
         }
 
-        self.drawer().set_scale(self.scale);
-        self.player().move_by_key(key);
+        let scale = self.scale;
+        self.drawer().set_scale(scale);
+        //self.player().move_by_key(key);
     }
 
     fn level(&self) -> &LevelBase {
@@ -55,7 +55,7 @@ impl GameLevel {
         let width = 280;
         let wall_width = 10;
 
-        self.add_wall((width, wall_width).into())
+        self.add_wall((0, 0, width, wall_width).into())
             .set_image(square.clone());
 
         self.add_wall((-width, width, wall_width, width).into())
@@ -88,7 +88,7 @@ impl GameLevel {
         let origin: Point = (LENGHT * x as f32, LENGHT * y as f32).into();
 
         if cell.left {
-            let rect = (
+            let _rect: Rect = (
                 origin.x + LENGHT / 2.0,
                 origin.y + WIDTH / 2.0,
                 LENGHT,
@@ -96,7 +96,7 @@ impl GameLevel {
             )
                 .into();
 
-            self.add_sprite(rect);
+           // self.add_sprite(rect);
         }
     }
 }

@@ -7,15 +7,17 @@ use test_engine::{
     sprites::{Control, SpritesDrawer},
     ui::{
         complex::{AnalogStickView, Slider},
-        view_base::{init_view_with_frame, make_view_on, ViewBase},
+        view_base::{make_view_on, ViewBase},
         DPadView, Label, View,
     },
     Image, Level,
 };
+use test_engine::ui::view_base::add_view_with_frame;
 use tokio::sync::mpsc::Receiver;
 
 use crate::game_level::GameLevel;
 
+#[derive(Debug)]
 pub struct ControlsView {
     base:          ViewBase,
     dpad:          Rglica<DPadView>,
@@ -42,9 +44,9 @@ impl ControlsView {
     }
 
     fn setup_slider(&mut self) {
-        let this = Rglica::from_ref(self);
+        let mut this = Rglica::from_ref(self);
         self.scale_slider = make_view_on(self, move |slider: &mut Slider| {
-            slider.multiplier = 5.0;
+            slider.set_multiplier(5);
             slider.frame_mut().size = (50, 280).into();
             slider.on_change.subscribe(move |scale| {
                 this.level.drawer().set_scale(scale);
@@ -78,7 +80,7 @@ impl ControlsView {
     }
 
     fn setup_ui(&mut self) {
-        self.gravity_label = init_view_with_frame((100, 100).into(), self);
+        self.gravity_label = add_view_with_frame(self, (100, 100).into());
     }
 }
 
@@ -93,10 +95,10 @@ impl View for ControlsView {
 
     fn layout(&mut self) {
         self.place().as_background();
-        self.dpad.place().bottom_left_margin(10);
-        self.stick.place().bottom_right_margin(10);
+        self.dpad.place().bottom_left(10);
+        self.stick.place().bottom_right(10);
         self.scale_slider.place().right();
-        self.gravity_label.place().top_right_margin(10);
+        self.gravity_label.place().top_right(10);
     }
 
     fn update(&mut self) {
@@ -122,7 +124,7 @@ impl GameView for ControlsView {
     fn level_mut(&mut self) -> &mut dyn Level {
         &mut self.level
     }
-    fn set_drawer(&mut self, drawer: Rc<dyn SpritesDrawer>) {
+    fn set_drawer(&mut self, drawer: Rglica<dyn SpritesDrawer>) {
         self.level.level_mut().drawer = drawer;
     }
 }
