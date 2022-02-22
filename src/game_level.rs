@@ -2,6 +2,8 @@ use test_engine::{
     assets::Assets,
     gm::{Point, Rect},
     maze::{cell::Cell, Grid},
+    rtools::Rglica,
+    sprites::{Control, Wall},
     Image, Level, LevelBase, Sprite,
 };
 
@@ -9,6 +11,7 @@ use test_engine::{
 pub struct GameLevel {
     scale: f32,
     base:  LevelBase,
+    cells: Vec<Rglica<Wall>>,
 }
 
 impl Level for GameLevel {
@@ -34,7 +37,7 @@ impl Level for GameLevel {
 
         let scale = self.scale;
         self.drawer().set_scale(scale);
-        //self.player().move_by_key(key);
+        self.player().move_by_key(key);
     }
 
     fn level(&self) -> &LevelBase {
@@ -72,6 +75,12 @@ impl GameLevel {
     }
 
     pub fn display_grid(&mut self, grid: &Grid) {
+        for cell in &mut self.cells {
+            cell.remove();
+        }
+
+        self.cells.clear();
+
         for (x, row) in grid.iter().enumerate() {
             for (y, cell) in row.iter().enumerate() {
                 self.add_cell(cell, x, y);
@@ -86,7 +95,7 @@ impl GameLevel {
         let origin: Point = (LENGHT * x as f32, LENGHT * y as f32).into();
 
         if cell.left {
-            let _rect: Rect = (
+            let rect: Rect = (
                 origin.x + LENGHT / 2.0,
                 origin.y + WIDTH / 2.0,
                 LENGHT,
@@ -94,7 +103,8 @@ impl GameLevel {
             )
                 .into();
 
-            // self.add_sprite(rect);
+            let wall = self.add_wall(rect.into());
+            self.cells.push(wall);
         }
     }
 }
