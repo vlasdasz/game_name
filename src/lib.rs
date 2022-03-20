@@ -2,6 +2,8 @@
 #![allow(clippy::missing_safety_doc)]
 #![feature(result_option_inspect)]
 
+extern crate core;
+
 use std::{
     os::raw::{c_float, c_int, c_ulong},
     ptr,
