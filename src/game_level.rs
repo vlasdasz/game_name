@@ -24,7 +24,7 @@ impl Level for GameLevel {
         self.base.player = self.add_body((0, 10, 17.0 / 6.0, 28.0 / 6.0).into());
         self.base.player.set_image(Assets::image("frisk.png"));
 
-        //self.make_walls();
+        // self.make_walls();
 
         for i in 0..500 {
             self.add_body((0.1 * i as f32, i as f32 * 0.5, 0.5, 0.5).into());
@@ -89,6 +89,13 @@ impl GameLevel {
     }
 
     fn add_cell(&mut self, cell: &Cell, x: usize, y: usize) {
+        if !cell.visited {
+            let frame = visited_frame(x, y);
+            let mut wall = self.add_wall(frame.into());
+            wall.set_color(Color::BLACK);
+            self.cells.push(wall);
+        }
+
         cell.all_sides(|side| {
             let frame = frame_for_side(side, x, y);
             let mut wall = self.add_wall(frame.into());
@@ -98,11 +105,21 @@ impl GameLevel {
     }
 }
 
-fn frame_for_side(side: CellSide, x: usize, y: usize) -> Rect {
-    const BIG: f32 = 20.0;
-    const SMALL: f32 = 0.5;
+const BIG: f32 = 20.0;
+const SMALL: f32 = 0.5;
 
-    let origin: Point = (BIG * 2.0 * x as f32, BIG * 2.0 * y as f32).into();
+fn origin(x: usize, y: usize) -> Point {
+    (BIG * 2.0 * x as f32, BIG * 2.0 * y as f32).into()
+}
+
+fn visited_frame(x: usize, y: usize) -> Rect {
+    let origin = origin(x, y);
+    const SIZE: f32 = BIG / 2.0;
+    (origin.x, origin.y, SIZE, SIZE).into()
+}
+
+fn frame_for_side(side: CellSide, x: usize, y: usize) -> Rect {
+    let origin = origin(x, y);
 
     match side {
         CellSide::Down => (origin.x, origin.y + BIG, BIG, SMALL),
