@@ -111,3 +111,5 @@ tools
 NDK/
 temp/
 extern/
+
+*jniLibs*
