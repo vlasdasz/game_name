@@ -1,21 +1,24 @@
-package com.example.test_engine;
+package com.example.testengine;
+
+import android.opengl.GLSurfaceView;
+import android.opengl.GLES30;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import android.opengl.GLSurfaceView;
-import android.util.Log;
-
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
-    public void onSurfaceCreated(GL10 unused, EGLConfig config) {
+    @Override
+    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         setup();
     }
 
+    @Override
     public void onDrawFrame(GL10 unused) {
         update();
     }
 
+    @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         setScreenSize(width, height);
     }

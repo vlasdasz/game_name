@@ -1,4 +1,4 @@
-package com.example.test_engine;
+package com.example.testengine;
 
 import org.junit.Test;
 

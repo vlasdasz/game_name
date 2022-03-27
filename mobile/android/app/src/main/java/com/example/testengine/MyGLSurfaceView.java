@@ -1,9 +1,11 @@
-package com.example.test_engine;
+package com.example.testengine;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-class MyGLSurfaceView extends GLSurfaceView {
+import com.example.testengine.MyGLRenderer;
+
+public class MyGLSurfaceView extends GLSurfaceView {
 
     private final MyGLRenderer renderer;
 
