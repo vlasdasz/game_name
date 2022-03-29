@@ -25,7 +25,11 @@ pub extern "C" fn create_screen(width: c_int, height: c_int) {
 
 #[no_mangle]
 pub extern "C" fn set_screen_size(width: c_int, height: c_int) {
-    unsafe { APP.as_mut().unwrap_unchecked().set_screen_size(width, height) }
+    unsafe {
+        APP.as_mut()
+            .unwrap_unchecked()
+            .set_screen_size(width, height)
+    }
 }
 
 #[no_mangle]

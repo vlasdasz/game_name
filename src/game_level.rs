@@ -21,13 +21,17 @@ impl Level for GameLevel {
     fn setup(&mut self) {
         self.scale = 1.0;
 
-        self.base.player = self.add_body((0, 10, 17.0 / 6.0, 28.0 / 6.0).into());
+        self.base.player = self.add_body((0, 10, 17.0 / 16.0, 28.0 / 16.0).into());
         self.base.player.set_image(Assets::image("frisk.png"));
+        self.base.player.lock_rotations();
+        dbg!(self.base.player.body().linear_damping());
+        self.base.player.collider_mut().set_restitution(0.0);
+        self.base.player.body_mut().set_linear_damping(1.0);
 
         // self.make_walls();
 
         for i in 0..500 {
-            self.add_body((0.1 * i as f32, i as f32 * 0.5, 0.5, 0.5).into());
+            self.add_body((0.1 * i as f32, i as f32 * 0.5, 0.2, 0.2).into());
         }
     }
 
@@ -105,8 +109,8 @@ impl GameLevel {
     }
 }
 
-const BIG: f32 = 20.0;
-const SMALL: f32 = 0.5;
+const BIG: f32 = 10.0;
+const SMALL: f32 = 1.0;
 
 fn origin(x: usize, y: usize) -> Point {
     (BIG * 2.0 * x as f32, BIG * 2.0 * y as f32).into()
