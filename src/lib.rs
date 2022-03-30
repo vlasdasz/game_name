@@ -19,11 +19,6 @@ mod game_level;
 static mut APP: *mut App<ControlsView> = ptr::null_mut();
 
 #[no_mangle]
-pub extern "C" fn create_screen(width: c_int, height: c_int) {
-    unsafe { APP.as_mut().unwrap_unchecked().create_screen(width, height) }
-}
-
-#[no_mangle]
 pub extern "C" fn set_screen_size(width: c_int, height: c_int) {
     unsafe {
         APP.as_mut()
