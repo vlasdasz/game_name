@@ -23,6 +23,8 @@ impl Level for GameLevel {
         self.base.player =
             Player::make((0, 10, 17.0 / 16.0, 28.0 / 16.0).into(), self.level_mut()).into();
 
+        self.base.player.weapon.set_image(Assets::image("ak.png"));
+
         self.base.player.set_image(Assets::image("frisk.png"));
 
         for i in 0..500 {
