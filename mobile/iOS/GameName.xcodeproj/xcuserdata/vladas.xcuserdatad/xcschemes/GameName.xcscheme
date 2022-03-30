@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D1411E792617166700F3F18B"
-               BuildableName = "TestEngine.app"
-               BlueprintName = "TestEngine"
-               ReferencedContainer = "container:TestEngine.xcodeproj">
+               BuildableName = "GameName.app"
+               BlueprintName = "GameName"
+               ReferencedContainer = "container:GameName.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D1411E792617166700F3F18B"
-            BuildableName = "TestEngine.app"
-            BlueprintName = "TestEngine"
-            ReferencedContainer = "container:TestEngine.xcodeproj">
+            BuildableName = "GameName.app"
+            BlueprintName = "GameName"
+            ReferencedContainer = "container:GameName.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D1411E792617166700F3F18B"
-            BuildableName = "TestEngine.app"
-            BlueprintName = "TestEngine"
-            ReferencedContainer = "container:TestEngine.xcodeproj">
+            BuildableName = "GameName.app"
+            BlueprintName = "GameName"
+            ReferencedContainer = "container:GameName.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
