@@ -46,7 +46,7 @@ impl ControlsView {
             slider.set_multiplier(5);
             slider.frame_mut().size = (50, 280).into();
             slider.on_change.subscribe(move |scale| {
-                this.level.drawer().set_scale(scale);
+                this.level.drawer_mut().set_scale(scale);
             });
         });
     }

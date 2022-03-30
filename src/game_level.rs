@@ -12,23 +12,18 @@ use test_engine::{
 
 #[derive(Default, Debug)]
 pub struct GameLevel {
-    scale: f32,
     base:  LevelBase,
     cells: Vec<Rglica<Wall>>,
 }
 
 impl Level for GameLevel {
     fn setup(&mut self) {
-        self.scale = 1.0;
+        self.set_scale(2.0);
 
         self.base.player =
             Player::make((0, 10, 17.0 / 16.0, 28.0 / 16.0).into(), self.level_mut()).into();
 
         self.base.player.set_image(Assets::image("frisk.png"));
-        self.base.player.lock_rotations();
-        dbg!(self.base.player.body().linear_damping());
-        self.base.player.collider_mut().set_restitution(0.0);
-        self.base.player.body_mut().set_linear_damping(1.0);
 
         for i in 0..500 {
             self.add_body((0.1 * i as f32, i as f32 * 0.5, 0.2, 0.2).into());
@@ -37,13 +32,11 @@ impl Level for GameLevel {
 
     fn on_key_pressed(&mut self, key: String) {
         if key == "-" {
-            self.scale /= 2.0;
+            self.set_scale(self.scale() / 2.0);
         } else if key == "=" {
-            self.scale *= 2.0;
+            self.set_scale(self.scale() * 2.0);
         }
 
-        let scale = self.scale;
-        self.drawer().set_scale(scale);
         self.player().move_by_key(key);
     }
 
