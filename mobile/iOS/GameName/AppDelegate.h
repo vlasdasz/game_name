@@ -1,6 +1,6 @@
 //
 //  AppDelegate.h
-//  TestEngine
+//  GameName
 //
 //  Created by Vladas Zakrevskis on 02.04.2021.
 //

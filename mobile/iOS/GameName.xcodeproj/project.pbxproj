@@ -136,7 +136,7 @@
 			dependencies = (
 			);
 			name = GameName;
-			productName = TestEngine;
+			productName = GameName;
 			productReference = D1411E7A2617166700F3F18B /* GameName.app */;
 			productType = "com.apple.product-type.application";
 		};
