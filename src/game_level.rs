@@ -5,7 +5,7 @@ use test_engine::{
         cell::{Cell, CellSide},
         Grid,
     },
-    rtools::Rglica,
+    rtools::{Rglica, ToRglica},
     sprites::{Control, Player, Wall},
     Image, Level, LevelBase, Sprite,
 };
@@ -20,12 +20,7 @@ impl Level for GameLevel {
     fn setup(&mut self) {
         self.set_scale(2.0);
 
-        self.base.player =
-            Player::make((0, 10, 17.0 / 16.0, 28.0 / 16.0).into(), self.level_mut()).into();
-
-        self.base.player.weapon.set_image(Assets::image("ak.png"));
-
-        self.base.player.set_image(Assets::image("frisk.png"));
+        self.setup_player();
 
         for i in 0..500 {
             self.add_body((0.1 * i as f32, i as f32 * 0.5, 0.2, 0.2).into());
@@ -52,6 +47,20 @@ impl Level for GameLevel {
 }
 
 impl GameLevel {
+    fn setup_player(&mut self) {
+        self.base.player =
+            Player::make((0, 10, 17.0 / 16.0, 28.0 / 16.0).into(), self.level_mut()).into();
+
+        self.base.player.weapon.set_image(Assets::image("ak.png"));
+        self.base.player.weapon.bullet_image = Assets::image("bullet.png").into();
+        self.base.player.set_image(Assets::image("frisk.png"));
+
+        let mut player = self.base.player.to_rglica();
+        self.base
+            .on_tap
+            .subscribe(move |pos| player.weapon.shoot_at(pos));
+    }
+
     fn _make_walls(&mut self) {
         let square = Image::load(&test_engine::paths::images().join("square.png"));
 
