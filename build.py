@@ -78,6 +78,8 @@ if ios:
     run("cargo lipo --release")
     os.chdir("mobile/iOS")
     run("xcodebuild -showsdks")
+    run("xcodebuild -list")
+    run("pwd")
     run("xcodebuild -sdk iphonesimulator -scheme GameName build")
 elif android:
     os.environ["CARGO_CFG_TARGET_OS"] = "android"
