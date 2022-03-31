@@ -19,8 +19,8 @@ jobs:
       - name: Debug
         run: |
           cd mobile/iOS
-          xcodebuild -showsdks
           xcodebuild -list
           pwd
+          ls
       - name: Build
         run: python3 build.py ios
