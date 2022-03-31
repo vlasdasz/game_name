@@ -16,5 +16,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
+      - name: Debug
+        run: |
+          cd mobile/iOS
+          xcodebuild -showsdks
+          xcodebuild -list
+          pwd
       - name: Build
         run: python3 build.py ios
