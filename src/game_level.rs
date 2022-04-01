@@ -27,6 +27,10 @@ impl Level for GameLevel {
         }
     }
 
+    fn update(&mut self) {
+        self.player().weapon.shoot_at(self.cursor_position());
+    }
+
     fn on_key_pressed(&mut self, key: String) {
         if key == "-" {
             self.set_scale(self.scale() / 2.0);
@@ -48,13 +52,11 @@ impl Level for GameLevel {
 
 impl GameLevel {
     fn setup_player(&mut self) {
-        self.base.player =
-            Player::make((0, 10, 17.0 / 16.0, 28.0 / 16.0).into(), self.level_mut()).into();
+        self.base.player = Player::make(Assets::image("frisk.png"), self.level_mut()).into();
 
         self.base.player.weapon.set_image(Assets::image("ak.png"));
         self.base.player.weapon.bullet_image = Assets::image("bullet.png").into();
-        self.base.player.weapon.bullet_speed = 4.0;
-        self.base.player.set_image(Assets::image("frisk.png"));
+        self.base.player.weapon.bullet_speed = 100.0;
 
         let mut player = self.base.player.to_rglica();
         self.base
