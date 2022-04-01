@@ -19,7 +19,7 @@ pub struct GameLevel {
 impl Level for GameLevel {
     fn setup(&mut self) {
         self.set_scale(2.0);
-
+        self.make_walls();
         self.setup_player();
 
         for i in 0..500 {
@@ -53,6 +53,7 @@ impl GameLevel {
 
         self.base.player.weapon.set_image(Assets::image("ak.png"));
         self.base.player.weapon.bullet_image = Assets::image("bullet.png").into();
+        self.base.player.weapon.bullet_speed = 4.0;
         self.base.player.set_image(Assets::image("frisk.png"));
 
         let mut player = self.base.player.to_rglica();
@@ -61,7 +62,7 @@ impl GameLevel {
             .subscribe(move |pos| player.weapon.shoot_at(pos));
     }
 
-    fn _make_walls(&mut self) {
+    fn make_walls(&mut self) {
         let square = Image::load(&test_engine::paths::images().join("square.png"));
 
         let width = 280;
@@ -76,13 +77,10 @@ impl GameLevel {
         self.add_wall((width, width, wall_width, width).into())
             .set_image(square.clone());
 
-        self.add_wall((0, width * 2, width, 5).into())
+        self.add_wall((50, 0, 5, 100).into())
             .set_image(square.clone());
 
-        self.add_wall((40, 0, 5, 100).into())
-            .set_image(square.clone());
-
-        self.add_wall((-40, 0, 5, 100).into()).set_image(square);
+        self.add_wall((-50, 0, 5, 100).into()).set_image(square);
     }
 
     pub fn display_grid(&mut self, grid: &Grid) {
@@ -113,8 +111,8 @@ impl GameLevel {
     }
 }
 
-const BIG: f32 = 10.0;
-const SMALL: f32 = 1.0;
+const BIG: f32 = 100.0;
+const SMALL: f32 = 2.0;
 
 fn origin(x: usize, y: usize) -> Point {
     (BIG * 2.0 * x as f32, BIG * 2.0 * y as f32).into()
