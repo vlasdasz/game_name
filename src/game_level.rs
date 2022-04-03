@@ -34,18 +34,22 @@ impl Level for GameLevel {
         self.player().move_by_key(key);
     }
 
-    fn level(&self) -> &LevelBase {
+    fn base(&self) -> &LevelBase {
         &self.base
     }
 
-    fn level_mut(&mut self) -> &mut LevelBase {
+    fn base_mut(&mut self) -> &mut LevelBase {
         &mut self.base
+    }
+
+    fn rglica(&self) -> Rglica<dyn Level> {
+        (self as &dyn Level).to_rglica()
     }
 }
 
 impl GameLevel {
     fn setup_player(&mut self) {
-        self.base.player = Player::make(Assets::image("frisk.png"), self.level_mut()).into();
+        self.base.player = Player::make(Assets::image("frisk.png"), self.rglica()).into();
 
         self.base.player.weapon.set_image(Assets::image("ak.png"));
         self.base.player.weapon.bullet_image = Assets::image("bullet.png").into();
@@ -58,10 +62,7 @@ impl GameLevel {
     }
 
     fn setup_enemies(&mut self) {
-        let mut enemy = Box::new(Unit::make(
-            Assets::image("chmonya.png"),
-            self.level_mut().into(),
-        ));
+        let mut enemy = Box::new(Unit::make(Assets::image("chmonya.png"), self.rglica()));
         enemy.enable_collision_detection();
         self.add_sprite(enemy);
     }

@@ -121,7 +121,7 @@ impl GameView for ControlsView {
         &mut self.level
     }
     fn set_drawer(&mut self, drawer: Rglica<dyn SpritesDrawer>) {
-        self.level.level_mut().drawer = drawer;
+        self.level.base_mut().drawer = drawer;
     }
 }
 
