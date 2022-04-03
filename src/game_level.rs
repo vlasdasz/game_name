@@ -6,7 +6,7 @@ use test_engine::{
         Grid,
     },
     rtools::{Rglica, ToRglica},
-    sprites::{Control, Player, Wall},
+    sprites::{Control, Player, Unit, Wall},
     Image, Level, LevelBase, Sprite,
 };
 
@@ -21,14 +21,7 @@ impl Level for GameLevel {
         self.set_scale(2.0);
         self.make_walls();
         self.setup_player();
-
-        for i in 0..500 {
-            self.add_body((0.1 * i as f32, i as f32 * 0.5, 0.2, 0.2).into());
-        }
-    }
-
-    fn update(&mut self) {
-        self.player().weapon.shoot_at(self.cursor_position());
+        self.setup_enemies();
     }
 
     fn on_key_pressed(&mut self, key: String) {
@@ -62,6 +55,15 @@ impl GameLevel {
         self.base
             .on_tap
             .subscribe(move |pos| player.weapon.shoot_at(pos));
+    }
+
+    fn setup_enemies(&mut self) {
+        let mut enemy = Box::new(Unit::make(
+            Assets::image("chmonya.png"),
+            self.level_mut().into(),
+        ));
+        enemy.enable_collision_detection();
+        self.add_sprite(enemy);
     }
 
     fn make_walls(&mut self) {

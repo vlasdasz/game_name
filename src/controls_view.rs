@@ -10,7 +10,7 @@ use test_engine::{
     },
     Image, Level,
 };
-use tokio::sync::mpsc::Receiver;
+use tokio::sync::mpsc::UnboundedReceiver;
 
 use crate::game_level::GameLevel;
 
@@ -23,7 +23,7 @@ pub struct ControlsView {
     scale_slider:  Rglica<Slider>,
     gravity_label: Rglica<Label>,
 
-    grid_recv: Receiver<Grid>,
+    grid_recv: UnboundedReceiver<Grid>,
 }
 
 impl ControlsView {
@@ -99,10 +99,9 @@ impl View for ControlsView {
     }
 
     fn update(&mut self) {
-        let _ = self
-            .grid_recv
-            .try_recv()
-            .inspect(|val| self.level.display_grid(val));
+        if let Ok(grid) = self.grid_recv.try_recv() {
+            self.level.display_grid(&grid);
+        }
     }
 
     fn view(&self) -> &ViewBase {
