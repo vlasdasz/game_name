@@ -64,6 +64,9 @@ impl GameLevel {
     fn setup_enemies(&mut self) {
         let mut enemy = Box::new(Unit::make(Assets::image("chmonya.png"), self.rglica()));
         enemy.enable_collision_detection();
+        enemy.sprite_mut().on_collision.subscribe(|sprite| {
+            dbg!(sprite);
+        });
         self.add_sprite(enemy);
     }
 
