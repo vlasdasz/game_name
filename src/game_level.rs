@@ -1,19 +1,20 @@
 use test_engine::{
     assets::Assets,
-    gm::{Color, Point, Rect},
+    gm::{volume::GyroData, Color, Point, Rect},
     maze::{
         cell::{Cell, CellSide},
         Grid,
     },
     rtools::{Rglica, ToRglica},
-    sprites::{Control, Player, Unit, Wall},
+    sprites::{Control, Player, SpriteBase, Unit, Wall},
     Image, Level, LevelBase, Sprite,
 };
 
 #[derive(Default, Debug)]
 pub struct GameLevel {
-    base:  LevelBase,
-    cells: Vec<Rglica<Wall>>,
+    base:        LevelBase,
+    cells:       Vec<Rglica<Wall>>,
+    gyro_sprite: Rglica<dyn Sprite>,
 }
 
 impl Level for GameLevel {
@@ -22,6 +23,8 @@ impl Level for GameLevel {
         self.make_walls();
         self.setup_player();
         self.setup_enemies();
+        self.gyro_sprite = self.add_sprite(Box::<SpriteBase>::new((0, 20, 2, 0.8).into()));
+        self.gyro_sprite.set_image(Assets::image("arrow.png"));
     }
 
     fn on_key_pressed(&mut self, key: String) {
@@ -32,6 +35,12 @@ impl Level for GameLevel {
         }
 
         self.player().move_by_key(key);
+    }
+
+    fn on_gyro_changed(&mut self, gyro: GyroData) {
+        dbg!(&gyro);
+        self.gyro_sprite
+            .set_rotation(gyro.pitch - std::f32::consts::PI / 2.0);
     }
 
     fn base(&self) -> &LevelBase {

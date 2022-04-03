@@ -22,6 +22,7 @@
 		D180CC2E261C457000B81CFB /* libSystem.B_asan.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D180CC28261C457000B81CFB /* libSystem.B_asan.tbd */; };
 		D1AF1F1A27F51C7D00D96828 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = D1AF1F1927F51C7D00D96828 /* Assets */; };
 		D1D524F4261BB078005C1426 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1D524F3261BB078005C1426 /* OpenGLES.framework */; };
+		D1F4F23D27F9B84C0008CE36 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1F4F23C27F9B84C0008CE36 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		D180CC28261C457000B81CFB /* libSystem.B_asan.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.B_asan.tbd; path = usr/lib/libSystem.B_asan.tbd; sourceTree = SDKROOT; };
 		D1AF1F1927F51C7D00D96828 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = ../../../test_engine/Assets; sourceTree = "<group>"; };
 		D1D524F3261BB078005C1426 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		D1F4F23C27F9B84C0008CE36 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 				D1308F3C27F49B6C00A62917 /* libgame_name.a in Frameworks */,
 				D180CC29261C457000B81CFB /* SystemConfiguration.framework in Frameworks */,
 				D180CC2A261C457000B81CFB /* libSystem.B.tbd in Frameworks */,
+				D1F4F23D27F9B84C0008CE36 /* CoreMotion.framework in Frameworks */,
 				D180CC2B261C457000B81CFB /* libswiftSystem_Foundation.tbd in Frameworks */,
 				D180CC2C261C457000B81CFB /* libswiftSystem.tbd in Frameworks */,
 				D180CC2D261C457000B81CFB /* libSystem_asan.tbd in Frameworks */,
@@ -107,6 +110,7 @@
 		D1D524F2261BB078005C1426 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D1F4F23C27F9B84C0008CE36 /* CoreMotion.framework */,
 				D180CC25261C457000B81CFB /* libswiftSystem_Foundation.tbd */,
 				D180CC26261C457000B81CFB /* libswiftSystem.tbd */,
 				D180CC27261C457000B81CFB /* libSystem_asan.tbd */,
