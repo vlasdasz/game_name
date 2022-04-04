@@ -355,7 +355,6 @@
 				CODE_SIGN_ENTITLEMENTS = GameName/GameName.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L363K9J2RM;
-				EXCLUDED_ARCHS = arm64;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../\"/**";
 				INFOPLIST_FILE = GameName/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -384,7 +383,6 @@
 				CODE_SIGN_ENTITLEMENTS = GameName/GameName.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L363K9J2RM;
-				EXCLUDED_ARCHS = arm64;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../\"/**";
 				INFOPLIST_FILE = GameName/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

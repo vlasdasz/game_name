@@ -5,16 +5,17 @@ use test_engine::{
         cell::{Cell, CellSide},
         Grid,
     },
-    rtools::{Rglica, ToRglica},
-    sprites::{Control, Player, SpriteBase, Unit, Wall},
-    Image, Level, LevelBase, Sprite,
+    rtools::{Rglica, ToRglica, Unwrap},
+    sprites::{Control, Player, SpriteData, Unit, Wall},
+    Level, LevelBase, Sprite,
 };
 
 #[derive(Default, Debug)]
 pub struct GameLevel {
     base:        LevelBase,
     cells:       Vec<Rglica<Wall>>,
-    gyro_sprite: Rglica<dyn Sprite>,
+    gyro_sprite: Rglica<SpriteData>,
+    pub player:  Rglica<Player>,
 }
 
 impl Level for GameLevel {
@@ -23,7 +24,11 @@ impl Level for GameLevel {
         self.make_walls();
         self.setup_player();
         self.setup_enemies();
-        self.gyro_sprite = self.add_sprite(Box::<SpriteBase>::new((0, 20, 2, 0.8).into()));
+
+        let gyro = SpriteData::make((0, 20, 2, 0.8).into(), self.rglica());
+        let rglyro = gyro.to_rglica();
+        self.add_sprite(gyro);
+        self.gyro_sprite = rglyro;
         self.gyro_sprite.set_image(Assets::image("arrow.png"));
     }
 
@@ -34,7 +39,7 @@ impl Level for GameLevel {
             self.set_scale(self.scale() * 2.0);
         }
 
-        self.player().move_by_key(key);
+        self.player.move_by_key(key);
     }
 
     fn on_gyro_changed(&mut self, gyro: GyroData) {
@@ -58,46 +63,53 @@ impl Level for GameLevel {
 
 impl GameLevel {
     fn setup_player(&mut self) {
-        self.base.player = Player::make(Assets::image("frisk.png"), self.rglica()).into();
+        let player = Player::make((0, 5, 2, 2).into(), self.rglica());
 
-        self.base.player.weapon.set_image(Assets::image("ak.png"));
-        self.base.player.weapon.bullet_image = Assets::image("bullet.png").into();
-        self.base.player.weapon.bullet_speed = 100.0;
+        self.player = player.to_rglica();
+        self.player.set_image(Assets::image("frisk.png"));
 
-        let mut player = self.base.player.to_rglica();
+        self.player.weapon.set_image(Assets::image("ak.png"));
+        self.player.weapon.bullet_image = Assets::image("bullet.png").into();
+        self.player.weapon.bullet_speed = 100.0;
+
+        self.base.player = Unwrap::from_box(player);
+
+        let mut player = self.player;
         self.base
             .on_tap
             .subscribe(move |pos| player.weapon.shoot_at(pos));
     }
 
     fn setup_enemies(&mut self) {
-        let mut enemy = Box::new(Unit::make(Assets::image("chmonya.png"), self.rglica()));
+        let mut enemy = Unit::make((0, 10, 2, 2).into(), self.rglica());
+        enemy.set_image(Assets::image("chmonya.png"));
         enemy.enable_collision_detection();
-        enemy.sprite_mut().on_collision.subscribe(|sprite| {
+        enemy.data_mut().on_collision.subscribe(|sprite| {
             dbg!(sprite);
         });
         self.add_sprite(enemy);
     }
 
     fn make_walls(&mut self) {
-        let square = Image::load(&test_engine::paths::images().join("square.png"));
-
-        let width = 280;
-        let wall_width = 10;
-
-        self.add_wall((0, 0, width, wall_width).into())
-            .set_image(square.clone());
-
-        self.add_wall((-width, width, wall_width, width).into())
-            .set_image(square.clone());
-
-        self.add_wall((width, width, wall_width, width).into())
-            .set_image(square.clone());
-
-        self.add_wall((50, 0, 5, 100).into())
-            .set_image(square.clone());
-
-        self.add_wall((-50, 0, 5, 100).into()).set_image(square);
+        // let square =
+        // Image::load(&test_engine::paths::images().join("square.png"));
+        //
+        // let width = 280;
+        // let wall_width = 10;
+        //
+        // self.add_wall((0, 0, width, wall_width).into())
+        //     .set_image(square.clone());
+        //
+        // self.add_wall((-width, width, wall_width, width).into())
+        //     .set_image(square.clone());
+        //
+        // self.add_wall((width, width, wall_width, width).into())
+        //     .set_image(square.clone());
+        //
+        // self.add_wall((50, 0, 5, 100).into())
+        //     .set_image(square.clone());
+        //
+        // self.add_wall((-50, 0, 5, 100).into()).set_image(square);
     }
 
     pub fn display_grid(&mut self, grid: &Grid) {
@@ -114,16 +126,18 @@ impl GameLevel {
     fn add_cell(&mut self, cell: &Cell, x: usize, y: usize) {
         if !cell.visited {
             let frame = visited_frame(x, y);
-            let mut wall = self.add_wall(frame.into());
+            let mut wall = Wall::make(frame, self.rglica());
             wall.set_color(Color::BLACK);
-            self.cells.push(wall);
+            self.cells.push(wall.to_rglica());
+            self.add_sprite(wall);
         }
 
         cell.all_sides(|side| {
             let frame = frame_for_side(side, x, y);
-            let mut wall = self.add_wall(frame.into());
+            let mut wall = Wall::make(frame, self.rglica());
             wall.set_color(Color::BLACK);
-            self.cells.push(wall);
+            self.cells.push(wall.to_rglica());
+            self.add_sprite(wall);
         })
     }
 }

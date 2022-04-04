@@ -70,7 +70,7 @@ impl ControlsView {
     fn setup_level(&mut self) {
         self.level_mut().setup();
 
-        let mut player = self.level_mut().player();
+        let mut player = self.level.player;
         self.dpad
             .on_press
             .subscribe(move |dir| player.move_by_direction(dir));
