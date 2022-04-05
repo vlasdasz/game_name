@@ -1,5 +1,6 @@
 #![feature(default_free_fn)]
 #![feature(result_option_inspect)]
+#![feature(explicit_generic_args_with_impl_trait)]
 
 mod controls_view;
 mod game_level;

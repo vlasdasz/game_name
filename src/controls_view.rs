@@ -77,7 +77,7 @@ impl ControlsView {
     }
 
     fn setup_ui(&mut self) {
-        self.gravity_label = add_view_with_frame(self, (100, 100).into());
+        self.gravity_label = add_view_with_frame(self, (100, 100));
     }
 }
 

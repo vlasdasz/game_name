@@ -1,6 +1,7 @@
 #![allow(incomplete_features)]
 #![allow(clippy::missing_safety_doc)]
 #![feature(result_option_inspect)]
+#![feature(explicit_generic_args_with_impl_trait)]
 
 extern crate core;
 

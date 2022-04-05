@@ -5,8 +5,8 @@ use test_engine::{
         cell::{Cell, CellSide},
         Grid,
     },
-    rtools::{Rglica, ToRglica, Unwrap},
-    sprites::{Control, Player, SpriteData, Unit, Wall},
+    rtools::{Rglica, ToRglica},
+    sprites::{add_sprite, Control, Player, SpriteData, Unit, Wall},
     Level, LevelBase, Sprite,
 };
 
@@ -30,6 +30,11 @@ impl Level for GameLevel {
         self.add_sprite(gyro);
         self.gyro_sprite = rglyro;
         self.gyro_sprite.set_image(Assets::image("arrow.png"));
+    }
+
+    fn update(&mut self) {
+        let pos = self.player.position();
+        self.set_camera_position(pos);
     }
 
     fn on_key_pressed(&mut self, key: String) {
@@ -63,16 +68,13 @@ impl Level for GameLevel {
 
 impl GameLevel {
     fn setup_player(&mut self) {
-        let player = Player::make((0, 5, 2, 2).into(), self.rglica());
+        self.player = add_sprite((0, 5, 2, 2), self);
 
-        self.player = player.to_rglica();
         self.player.set_image(Assets::image("frisk.png"));
 
         self.player.weapon.set_image(Assets::image("ak.png"));
         self.player.weapon.bullet_image = Assets::image("bullet.png").into();
         self.player.weapon.bullet_speed = 100.0;
-
-        self.base.player = Unwrap::from_box(player);
 
         let mut player = self.player;
         self.base
@@ -125,19 +127,15 @@ impl GameLevel {
 
     fn add_cell(&mut self, cell: &Cell, x: usize, y: usize) {
         if !cell.visited {
-            let frame = visited_frame(x, y);
-            let mut wall = Wall::make(frame, self.rglica());
+            let mut wall = add_sprite::<Wall>(visited_frame(x, y), self);
             wall.set_color(Color::BLACK);
-            self.cells.push(wall.to_rglica());
-            self.add_sprite(wall);
+            self.cells.push(wall);
         }
 
         cell.all_sides(|side| {
-            let frame = frame_for_side(side, x, y);
-            let mut wall = Wall::make(frame, self.rglica());
+            let mut wall = add_sprite::<Wall>(frame_for_side(side, x, y), self);
             wall.set_color(Color::BLACK);
-            self.cells.push(wall.to_rglica());
-            self.add_sprite(wall);
+            self.cells.push(wall);
         })
     }
 }
