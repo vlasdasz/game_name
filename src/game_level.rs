@@ -1,19 +1,14 @@
 use test_engine::{
-    assets::Assets,
-    gm::{volume::GyroData, Color, Point, Rect},
-    maze::{
-        cell::{Cell, CellSide},
-        Grid,
-    },
+    assets::ImageManager,
+    gm::volume::GyroData,
     rtools::{Rglica, ToRglica},
-    sprites::{add_sprite, Control, Player, SpriteData, Unit, Wall},
-    Level, LevelBase, Sprite,
+    sprites::{add_sprite, Control, Player, SpriteData, Unit},
+    Image, Level, LevelBase, Sprite,
 };
 
 #[derive(Default, Debug)]
 pub struct GameLevel {
     base:        LevelBase,
-    cells:       Vec<Rglica<Wall>>,
     gyro_sprite: Rglica<SpriteData>,
     pub player:  Rglica<Player>,
 }
@@ -25,11 +20,11 @@ impl Level for GameLevel {
         self.setup_player();
         self.setup_enemies();
 
-        let gyro = SpriteData::make((0, 20, 2, 0.8).into(), self.rglica());
+        let gyro = SpriteData::make((2, 0.8).into(), (0, 20).into(), self.rglica());
         let rglyro = gyro.to_rglica();
         self.add_sprite(gyro);
         self.gyro_sprite = rglyro;
-        self.gyro_sprite.set_image(Assets::image("arrow.png"));
+        self.gyro_sprite.set_image(Image::get("arrow.png"));
     }
 
     fn update(&mut self) {
@@ -68,12 +63,12 @@ impl Level for GameLevel {
 
 impl GameLevel {
     fn setup_player(&mut self) {
-        self.player = add_sprite((0, 5, 2, 2), self);
+        self.player = add_sprite((2, 2), (0, 5), self);
 
-        self.player.set_image(Assets::image("frisk.png"));
+        self.player.set_image(Image::get("frisk.png"));
 
-        self.player.weapon.set_image(Assets::image("ak.png"));
-        self.player.weapon.bullet_image = Assets::image("bullet.png").into();
+        self.player.weapon.set_image(Image::get("ak.png"));
+        self.player.weapon.bullet_image = Image::get("bullet.png").into();
         self.player.weapon.bullet_speed = 100.0;
 
         let mut player = self.player;
@@ -83,8 +78,8 @@ impl GameLevel {
     }
 
     fn setup_enemies(&mut self) {
-        let mut enemy = Unit::make((0, 10, 2, 2).into(), self.rglica());
-        enemy.set_image(Assets::image("chmonya.png"));
+        let mut enemy = Unit::make((2, 2).into(), (0, 10).into(), self.rglica());
+        enemy.set_image(Image::get("chmonya.png"));
         enemy.enable_collision_detection();
         enemy.data_mut().on_collision.subscribe(|sprite| {
             dbg!(sprite);
@@ -113,54 +108,4 @@ impl GameLevel {
         //
         // self.add_wall((-50, 0, 5, 100).into()).set_image(square);
     }
-
-    pub fn display_grid(&mut self, grid: &Grid) {
-        self.cells.iter_mut().for_each(|a| a.remove());
-        self.cells.clear();
-
-        for (x, row) in grid.iter().enumerate() {
-            for (y, cell) in row.iter().enumerate() {
-                self.add_cell(cell, x, y);
-            }
-        }
-    }
-
-    fn add_cell(&mut self, cell: &Cell, x: usize, y: usize) {
-        if !cell.visited {
-            let mut wall = add_sprite::<Wall>(visited_frame(x, y), self);
-            wall.set_color(Color::BLACK);
-            self.cells.push(wall);
-        }
-
-        cell.all_sides(|side| {
-            let mut wall = add_sprite::<Wall>(frame_for_side(side, x, y), self);
-            wall.set_color(Color::BLACK);
-            self.cells.push(wall);
-        })
-    }
-}
-
-const BIG: f32 = 100.0;
-const SMALL: f32 = 2.0;
-
-fn origin(x: usize, y: usize) -> Point {
-    (BIG * 2.0 * x as f32, BIG * 2.0 * y as f32).into()
-}
-
-fn visited_frame(x: usize, y: usize) -> Rect {
-    let origin = origin(x, y);
-    const SIZE: f32 = BIG / 2.0;
-    (origin.x, origin.y, SIZE, SIZE).into()
-}
-
-fn frame_for_side(side: CellSide, x: usize, y: usize) -> Rect {
-    let origin = origin(x, y);
-
-    match side {
-        CellSide::Down => (origin.x, origin.y + BIG, BIG, SMALL),
-        CellSide::Up => (origin.x, origin.y - BIG, BIG, SMALL),
-        CellSide::Left => (origin.x - BIG, origin.y, SMALL, BIG),
-        CellSide::Right => (origin.x + BIG, origin.y, SMALL, BIG),
-    }
-    .into()
 }

@@ -1,6 +1,6 @@
 use test_engine::{
+    assets::ImageManager,
     game_view::GameView,
-    maze::{maker::Maker, Grid},
     rtools::{Rglica, ToRglica},
     sprites::{Control, SpritesDrawer},
     ui::{
@@ -10,11 +10,10 @@ use test_engine::{
     },
     Image, Level,
 };
-use tokio::sync::mpsc::UnboundedReceiver;
 
 use crate::game_level::GameLevel;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct ControlsView {
     base:          ViewBase,
     dpad:          Rglica<DPadView>,
@@ -22,8 +21,6 @@ pub struct ControlsView {
     level:         GameLevel,
     scale_slider:  Rglica<Slider>,
     gravity_label: Rglica<Label>,
-
-    grid_recv: UnboundedReceiver<Grid>,
 }
 
 impl ControlsView {
@@ -32,10 +29,10 @@ impl ControlsView {
             dpad.frame_mut().size = (280, 200).into();
 
             dpad.set_images(
-                Image::load(&test_engine::paths::images().join("up.png")),
-                Image::load(&test_engine::paths::images().join("down.png")),
-                Image::load(&test_engine::paths::images().join("left.png")),
-                Image::load(&test_engine::paths::images().join("right.png")),
+                Image::get("up.png"),
+                Image::get("down.png"),
+                Image::get("left.png"),
+                Image::get("right.png"),
             );
         });
     }
@@ -98,12 +95,6 @@ impl View for ControlsView {
         self.gravity_label.place().top_right(10);
     }
 
-    fn update(&mut self) {
-        if let Ok(grid) = self.grid_recv.try_recv() {
-            self.level.display_grid(&grid);
-        }
-    }
-
     fn view(&self) -> &ViewBase {
         &self.base
     }
@@ -120,21 +111,7 @@ impl GameView for ControlsView {
     fn level_mut(&mut self) -> &mut dyn Level {
         &mut self.level
     }
-    fn set_drawer(&mut self, drawer: Rglica<dyn SpritesDrawer>) {
+    fn set_sprites_drawer(&mut self, drawer: Rglica<dyn SpritesDrawer>) {
         self.level.base_mut().drawer = drawer;
-    }
-}
-
-impl Default for ControlsView {
-    fn default() -> Self {
-        Self {
-            base:          Default::default(),
-            dpad:          Default::default(),
-            stick:         Default::default(),
-            level:         Default::default(),
-            scale_slider:  Default::default(),
-            gravity_label: Default::default(),
-            grid_recv:     Maker::generate(),
-        }
     }
 }
