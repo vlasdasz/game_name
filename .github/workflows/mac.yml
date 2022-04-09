@@ -11,10 +11,10 @@ env:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macOS
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
       - name: Mac
-        run: cargo build
+        run: arch -arm64 cargo build
