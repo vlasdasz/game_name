@@ -1,7 +1,6 @@
 use test_engine::{
-    assets::ImageManager,
     gm::volume::GyroData,
-    rtools::{Rglica, ToRglica},
+    rtools::{data_manager::DataManager, Rglica, ToRglica},
     sprites::{add_sprite, Control, Player, SpriteData, Unit},
     Image, Level, LevelBase, Sprite,
 };
@@ -68,7 +67,7 @@ impl GameLevel {
         self.player.set_image(Image::get("frisk.png"));
 
         self.player.weapon.set_image(Image::get("ak.png"));
-        self.player.weapon.bullet_image = Image::get("bullet.png").into();
+        self.player.weapon.bullet_image = Image::get("bullet.png");
         self.player.weapon.bullet_speed = 100.0;
 
         let mut player = self.player;

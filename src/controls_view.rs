@@ -1,7 +1,6 @@
 use test_engine::{
-    assets::ImageManager,
     game_view::GameView,
-    rtools::{Rglica, ToRglica},
+    rtools::{data_manager::DataManager, Rglica, ToRglica},
     sprites::{Control, SpritesDrawer},
     ui::{
         complex::{AnalogStickView, Slider},
