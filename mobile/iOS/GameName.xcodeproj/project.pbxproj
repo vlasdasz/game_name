@@ -13,6 +13,7 @@
 		D1411E8A2617166800F3F18B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1411E892617166800F3F18B /* Assets.xcassets */; };
 		D1411E8D2617166800F3F18B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D1411E8B2617166800F3F18B /* LaunchScreen.storyboard */; };
 		D1411E902617166800F3F18B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D1411E8F2617166800F3F18B /* main.m */; };
+		D170B5982803A06B00BA92F5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D170B5972803A06B00BA92F5 /* AudioToolbox.framework */; };
 		D180CC21261C455B00B81CFB /* libSystem.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D180CC20261C455B00B81CFB /* libSystem.tbd */; };
 		D180CC29261C457000B81CFB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D180CC23261C457000B81CFB /* SystemConfiguration.framework */; };
 		D180CC2A261C457000B81CFB /* libSystem.B.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D180CC24261C457000B81CFB /* libSystem.B.tbd */; };
@@ -37,6 +38,7 @@
 		D1411E8E2617166800F3F18B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D1411E8F2617166800F3F18B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D14901F72617215B0044E630 /* test_engine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = test_engine.h; path = ../../../src/test_engine.h; sourceTree = "<group>"; };
+		D170B5972803A06B00BA92F5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D17CC3E42617174D00F55C2E /* GameName.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GameName.entitlements; sourceTree = "<group>"; };
 		D180CC20261C455B00B81CFB /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = usr/lib/libSystem.tbd; sourceTree = SDKROOT; };
 		D180CC23261C457000B81CFB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -55,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D170B5982803A06B00BA92F5 /* AudioToolbox.framework in Frameworks */,
 				D1308F3C27F49B6C00A62917 /* libgame_name.a in Frameworks */,
 				D180CC29261C457000B81CFB /* SystemConfiguration.framework in Frameworks */,
 				D180CC2A261C457000B81CFB /* libSystem.B.tbd in Frameworks */,
@@ -110,6 +113,7 @@
 		D1D524F2261BB078005C1426 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D170B5972803A06B00BA92F5 /* AudioToolbox.framework */,
 				D1F4F23C27F9B84C0008CE36 /* CoreMotion.framework */,
 				D180CC25261C457000B81CFB /* libswiftSystem_Foundation.tbd */,
 				D180CC26261C457000B81CFB /* libswiftSystem.tbd */,
