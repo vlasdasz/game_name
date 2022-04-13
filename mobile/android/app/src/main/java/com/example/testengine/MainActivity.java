@@ -20,7 +20,7 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
 
     static {
-        System.loadLibrary("test_game");
+        System.loadLibrary("game_name");
     }
 
     @Override
